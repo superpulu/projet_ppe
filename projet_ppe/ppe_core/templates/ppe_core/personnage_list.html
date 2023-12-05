@@ -1,0 +1,10 @@
+{%if latest_personnage_list %}
+<ul>
+{% for personnage in latest_personnage_list %}
+    <li><a href="personnage/{{ personnage.id }}/">{{ personnage.name }}</a></li>
+
+{% endfor %}
+</ul>
+{% else %}
+    <p>Aucun personnage connu.</p>
+{% endif %}

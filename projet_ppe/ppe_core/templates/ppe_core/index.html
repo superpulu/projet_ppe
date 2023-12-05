@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'ppe_core/css/index.css' %}">
+    <script type="text/javascript" src="{%static 'ppe_core/js/p5.min.js' %}"></script>
+    <script type="text/javascript" src="{%static 'ppe_core/js/jquery.js' %}"></script>
+
+</head>
+<body>
+
+    <div class="sidenav" id="navbar">
+        <ul>
+{% for personnage in personnage_list %}
+            <li><a href="#" onclick="updatePersonnageSkin({{ personnage.skin }})">{{ personnage.name }}</a></li>
+
+{% endfor %}
+        </ul>
+    </div>
+    <div class="main" id="mainframe">
+        <script>
+
+
+            let personnage_img; 
+            let vitesse_animation = 10;
+            let canvas_height = 500;
+            let canvas_witdh = 500;
+            let border_width = 50;
+            let started = false;
+            let dead = false;
+            
+
+            function init_personnage(){
+                started = true;
+                dead = false;
+                personnage_x = personnage_start_x;
+                personnage_y = personnage_start_y;
+                vitesse_animation = 10;
+            }
+            
+            function setup() {
+
+                cnv = createCanvas(canvas_witdh, canvas_height);
+                cnv.parent("mainframe");
+                cnv.mouseClicked(init_personnage);
+                    
+                img = loadImage("{%static 'ppe_core/img/pacman.png' %}");
+                frameRate(15);
+                stroke(255);
+                strokeWeight(10);
+            
+                personnage_start_x = border_width + 48;
+                personnage_start_y = ( canvas_height - 48 ) / 2;
+            }
+
+            function animate(){
+                drawPersonnage();
+                changerPositionPersonnage();
+                
+            }
+            
+            function draw() {
+                background(0);
+                
+
+                if (started){
+                    drawMaze();
+                    animate();
+                }
+                else {
+                    fill('tomato');
+                    stroke(2);
+                    textSize(30);
+                    text("Cliquez pour démarrer.", 100, 150);
+                }
+                if (dead){
+                    drawMaze();
+                    drawPersonnage();
+                    fill('tomato');
+                    stroke(2);
+                    textSize(30);
+                    text("Cliquez pour recommencer.", 80, 150);
+                }
+
+                
+              
+            }
+            
+            function endGame() {
+                vitesse_animation = 0;
+                dead = true;
+            
+            }
+            
+            function drawPersonnage(){
+                stroke(255, 204, 0);
+                strokeWeight(2);
+                noFill();
+                if ( (personnage_x + vitesse_animation)  >= (canvas_witdh - border_width - 48) ){
+                    endGame()
+                }
+                image(img, personnage_x, personnage_y);
+            }
+            
+            function drawMaze(){
+            
+                rect_height = 100;
+                fill('black')    
+                rect(
+                    border_width , 
+                    (canvas_height - rect_height) / 2 , 
+                    canvas_witdh - border_width *2 ,
+                     rect_height);
+            
+            
+            }
+            
+            function changerPositionPersonnage(){
+                personnage_x = personnage_x + vitesse_animation;
+            }
+            
+            
+        </script>
+                    
+    </div>
+</body>
+</html>
+
+
+
+

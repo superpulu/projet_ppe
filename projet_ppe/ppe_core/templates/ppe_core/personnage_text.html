@@ -1,0 +1,10 @@
+{% load static %}
+<div>
+<p><b>Nom : {{ personnage.name }}</b></p>
+<p>abscisse : {{ personnage.pos_x }}</p>
+<p>ordonnée : {{ personnage.pos_y }}</p>
+
+{%with 'ppe_core/img/'|add:personnage.skin|add:'.png' as image %}
+<p>skin : <img src="{% static image %}" alt="{{ personnage.skin }}" /></p>
+{%endwith %}
+</div>
